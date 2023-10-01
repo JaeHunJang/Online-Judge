@@ -1,10 +1,10 @@
 # [unrated] 9로 나눈 나머지 - 181914 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181914) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181914?language=java) 
 
 ### 성능 요약
 
-메모리: 74.1 MB, 시간: 0.11 ms
+메모리: 75.9 MB, 시간: 0.02 ms
 
 ### 구분
 
