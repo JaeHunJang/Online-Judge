@@ -6,6 +6,7 @@ class Solution {
             for(int j = 0; j < answer[i].length; j++){
                 answer[i][j] = num_list[k++];
             }
+            //answer[i/n][i%n]=num_list[i];
         }
         
         return answer;
