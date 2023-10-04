@@ -3,8 +3,10 @@ class Solution {
         String answer = "";
         
         myString = myString.toLowerCase();
-        for(String s : myString.split(""))
-            answer += s.equals("a") ? s.toUpperCase() : s;
+        answer = myString.replace("a", "A");
+        // for(String s : myString.split(""))
+        //     answer += s.equals("a") ? s.toUpperCase() : s;
+        
             
         return answer;
     }
