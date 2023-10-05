@@ -4,6 +4,7 @@ class Solution {
         int[] temp = new int[n+1];
         int answer = 0;
         
+        //에라토스테네스의 체
         for(int i = 2; i*i <= n; i++){
             if(temp[i] == 0){
                 for(int j = i*i; j <= n; j += i){
