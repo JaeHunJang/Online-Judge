@@ -21,7 +21,7 @@ class Solution {
             }
         }
         
-        // int answer = 0, per = 3905; //per : 조합의 경우의 수
+        // int answer = 0, per = 3905; //per : 조합의 경우의 수 (5^5 + 5^4 + 5^3 + 5^2 + 5^1)
         // for(String s : word.split("")) answer += "AEIOU".indexOf(s) * (per /= 5) + 1;
         // return answer;
         
