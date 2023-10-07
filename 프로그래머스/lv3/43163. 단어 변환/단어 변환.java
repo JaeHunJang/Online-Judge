@@ -10,7 +10,7 @@ class Solution {
         }
     }
     
-    boolean isNext(String s1, String s2){
+    boolean isNext(String s1, String s2){ // 1개만 다른지 검사
         char[] ch1 = s1.toCharArray();
         char[] ch2 = s2.toCharArray();
         
@@ -34,8 +34,8 @@ class Solution {
             if(state.word.equals(target)) return state.step;
             
             for(int i = 0; i < words.length; i++){
-                if(visit[i]) continue;
-                if(isNext(words[i], state.word)) { 
+                if(visit[i]) continue; //이미 변환한적 있으면 넘김
+                if(isNext(words[i], state.word)) { //변환 가능하면 변환
                     q.add(new State(words[i], state.step + 1));
                     visit[i] = true;
                 }
