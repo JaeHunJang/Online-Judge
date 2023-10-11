@@ -32,5 +32,14 @@ class Solution {
         }
         
         return answer;
+        
+        //한 명씩 태우는 경우의 수 - 두 명 태우는 경우의 수
+        // Arrays.sort(people);
+        // int i = 0, j = people.length - 1;
+        // for (; i < j; --j) {
+        //     if (people[i] + people[j] <= limit)
+        //         ++i;
+        // }
+        // return people.length - i;
     }
 }
