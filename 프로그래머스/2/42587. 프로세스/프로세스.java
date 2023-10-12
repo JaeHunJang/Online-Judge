@@ -13,7 +13,6 @@ class Solution {
         int answer = 0;
         LinkedList<Process> list = new LinkedList<>(); //배열에 담긴 걸 Queue에 담음
         LinkedList<Process> list2 = new LinkedList<>(); //우선순위에 따라 정렬된 프로세스 Queue
-        Process find = new Process(priorities[location], location);
         
         for(int p : priorities){
             list.add(new Process(p, answer++));
@@ -21,6 +20,7 @@ class Solution {
         
         Arrays.sort(priorities); //우선순위 정렬
         
+        answer = 1;
         int i = priorities.length-1;
         while(i >= 0){
             Process p = list.poll();
