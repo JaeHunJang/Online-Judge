@@ -11,33 +11,19 @@ class Solution {
     }
     public int solution(int[] priorities, int location) {
         int answer = 0;
-        LinkedList<Process> list = new LinkedList<>();
-        LinkedList<Process> list2 = new LinkedList<>();
+        LinkedList<Process> list = new LinkedList<>(); //배열에 담긴 걸 Queue에 담음
+        LinkedList<Process> list2 = new LinkedList<>(); //우선순위에 따라 정렬된 프로세스 Queue
         Process find = new Process(priorities[location], location);
         
         for(int p : priorities){
             list.add(new Process(p, answer++));
         }
         
+        Arrays.sort(priorities); //우선순위 정렬
         
-        Arrays.sort(priorities);
-        
-        // for(int i = priorities.length-1; i >= 0; i--){
-        //     for(int j = 0; j < list.size(); j++){
-        //         Process p = list.poll();
-        //     // System.out.println(p.priority + "|" + p.index + "| i : " + i + "| j : " + j);
-        //         if(priorities[i] > p.priority) {
-        //             list.add(p);
-        //         } else {
-        //             // list.add(j, p);
-        //         }
-        //     }
-        // }
-        // answer = 1;
         int i = priorities.length-1;
         while(i >= 0){
             Process p = list.poll();
-        System.out.println(priorities[i]+ " | " + p.priority + "|" + p.index + "|" +(priorities[i] > p.priority));
 
             if(priorities[i] > p.priority) {
                 list.add(p);
@@ -45,17 +31,10 @@ class Solution {
                 list2.add(p);
                 i--; 
             }
-            
         }
-                        // System.out.println("---------------------");
-
-        // }
         
-                        System.out.println("---------------------");
-        answer = 1;
+        answer = 1; //location 찾기
         for(Process p : list2){
-            System.out.println(p.priority + "|" + p.index);
-            
             if(p.index == location) break;
             answer++;
         }
