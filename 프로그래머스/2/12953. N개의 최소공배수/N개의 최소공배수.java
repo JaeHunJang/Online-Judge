@@ -19,5 +19,43 @@ class Solution {
         }
         
         return q.pop();
+        
+        /* //아이디어가 돋보이는 코드
+        int answer = 0;
+        Arrays.sort(arr);
+        int max = arr[arr.length - 1];
+        
+        loop: while(true) { //이름붙은 반복문
+            answer += max;
+            for(int num : arr) {
+                if(answer % num != 0) {
+                    continue loop;
+                }
+            }
+        return answer;
+        */
+        
+        /* //간단하게 메소드를 정의하여 푼 코드
+    public int solution(int[] arr) {
+        int lcm = arr[0];
+
+        for (int i = 0; i < arr.length; i++) {
+            lcm = lcm(arr[i], lcm);
+        }
+
+        return lcm;
+    }
+
+    private int gcd(int a, int b) {
+        if (b == 0)
+            return a;
+        return gcd(b, a % b);
+    }
+
+    private int lcm(int a, int b) {
+        int gcd = gcd(a,b);
+        return gcd * (a / gcd) * (b / gcd);
+    }
+        */
     }
 }
