@@ -1,6 +1,6 @@
 class Solution {
     public long solution(int n) {
-        long answer = 0;
+        //피보나치 수열 1|1, 2|2, 3|3, 4|5, 5|8, 6|13
         int[] arr = new int[n];
         arr[0] = 1;
         
