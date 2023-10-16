@@ -1,10 +1,5 @@
 import java.util.*;
 class Solution {
-    private void swap(int x, int y, int[] arr){
-        int temp = arr[x];
-        arr[x] = arr[y];
-        arr[y] = temp;
-    }
     public String solution(int[] numbers) {
         String answer = "";
         
@@ -13,13 +8,13 @@ class Solution {
             temp[i] = numbers[i] + "";
        
         Arrays.sort(temp, (o1, o2) -> {
-            return Integer.parseInt((o2 + o1 + "")) -  Integer.parseInt((o1 + o2 + ""));
+            return (o2 + o1).compareTo(o1 + o2);
         });
         
         for(String n : temp)
             answer += n;
         
-        if(answer.startsWith("0")) return "0";
+        if(answer.startsWith("0")) return "0"; //0으로 시작한 경우 제공된 배열이 전부 0
         
         return answer;
     }
