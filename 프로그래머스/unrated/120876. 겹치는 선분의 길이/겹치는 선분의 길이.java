@@ -2,8 +2,7 @@ import java.util.*;
 class Solution {
     public int solution(int[][] lines) {
         int answer = 0;
-        Queue<int[]> q = new LinkedList();
-        int[] l = new int[202];
+        int[] l = new int[200];
         
         Arrays.sort(lines, Comparator.comparingInt(x1 -> x1[0]));
         
@@ -14,7 +13,6 @@ class Solution {
                     int end = Math.min(line[1], line2[1]);
                     int start = Math.max(line[0], line2[0]);
                     for(int i = start; i < end; i++){
-                        // System.out.println(i+"");
                         l[i+100] = 1;
                     }
                 } 

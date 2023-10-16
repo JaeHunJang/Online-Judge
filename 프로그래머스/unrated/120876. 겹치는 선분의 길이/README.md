@@ -1,10 +1,10 @@
 # [level unrated] 겹치는 선분의 길이 - 120876 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/120876#qna) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/120876?language=java) 
 
 ### 성능 요약
 
-메모리: 66.2 MB, 시간: 2.54 ms
+메모리: 72.6 MB, 시간: 3.43 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2023년 10월 1일 12:8:42
+2023년 10월 1일 12:12:39
 
 ### 문제 설명
 
