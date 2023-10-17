@@ -9,13 +9,18 @@ class Solution {
             heap.add(n);
         }
         
-        while(!heap.isEmpty()){
-            if(heap.peek() < K) {
-                if(heap.size() < 2) return -1;
-                heap.add(heap.poll() + (heap.poll()*2));
-            } else break;
+        // while(!heap.isEmpty()){
+        while(heap.size() > 1 && heap.peek() < K){
+            heap.add(heap.poll() + (heap.poll() * 2));
+            
+            // if(heap.peek() < K) {
+            //     if(heap.size() < 2) return -1;
+            // } else break;
             answer++;
         }
+        //pqScov.size() > 1 && pqScov.peek() < K
+        
+        if(heap.size() < 2 && heap.peek() < K) return -1;
         
         return answer;
     }
