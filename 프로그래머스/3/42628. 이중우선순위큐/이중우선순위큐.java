@@ -1,32 +1,30 @@
 import java.util.*;
 class Solution {
     public int[] solution(String[] operations) {
-        PriorityQueue<Integer> pq1 = new PriorityQueue();
-        PriorityQueue<Integer> pq2 = new PriorityQueue(Collections.reverseOrder());
+        PriorityQueue<Integer> pqAsc = new PriorityQueue();
+        PriorityQueue<Integer> pqDesc = new PriorityQueue(Collections.reverseOrder());
         
         for(String s : operations){
             int temp;
-            
             if(s.contains("I")){
                 temp = Integer.parseInt(s.replace("I ",""));
-                
-                pq1.add(temp);
-                pq2.add(temp);
-            }else {
-                
-                if("D -1".equals(s) && pq1.size() > 0) {
-                    temp = pq1.poll();
-                    pq2.remove(temp);
+                pqAsc.add(temp);
+                pqDesc.add(temp);
+            } else {
+                if("D -1".equals(s) && pqAsc.size() > 0) {
+                    temp = pqAsc.poll();
+                    pqDesc.remove(temp);
                 }
-                else if ("D 1".equals(s) && pq1.size() > 0){
-                    temp = pq2.poll();
-                    pq1.remove(temp);
+                else if ("D 1".equals(s) && pqAsc.size() > 0){
+                    temp = pqDesc.poll();
+                    pqAsc.remove(temp);
                 }
-                
             }
         }
-        if(pq1.size() > 0)
-            return new int[] {pq2.poll(), pq1.poll()};
-        else return new int[] {0, 0};
+        
+        if(pqAsc.size() > 0)
+            return new int[] {pqDesc.poll(), pqAsc.poll()};
+        else 
+            return new int[] {0, 0};
     }
 }
