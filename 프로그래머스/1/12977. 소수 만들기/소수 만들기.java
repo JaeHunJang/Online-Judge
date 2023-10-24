@@ -38,6 +38,15 @@ class Solution {
         boolean[] visited = new boolean[nums.length];
         
         combination(nums, visited, 0, nums.length, 3);
+        
+        // 더 짧게 만든 방법
+        // for(int i = 0; i < nums.length - 2; i ++){
+        //     for(int j = i + 1; j < nums.length - 1; j ++){
+        //         for(int k = j + 1; k < nums.length; k ++ ){
+        //             isPrimeNumber(nums[i] + nums[j] + nums[k]);
+        //         }
+        //     }
+        // }
 
         return answer;
     }
