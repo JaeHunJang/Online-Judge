@@ -16,6 +16,9 @@ class Solution
 					map[i][j] = sc.nextInt();
 			
 			List<Integer> list = new ArrayList<>();
+            
+            int crossSum1 = 0;
+			int crossSum2 = 0;
 			for(int i = 0; i < map.length; i++) {
 				int rowSum = 0;
 				int colSum = 0;
@@ -23,15 +26,10 @@ class Solution
 					rowSum += map[i][j];
 					colSum += map[j][i];
 				}
+                crossSum1 += map[i][i];
+				crossSum2 += map[map.length - i - 1][i];
 				list.add(rowSum);
 				list.add(colSum);
-			}
-			
-			int crossSum1 = 0;
-			int crossSum2 = 0;
-			for(int i = 0; i < map.length; i++) {
-				crossSum1 += map[i][i];
-				crossSum2 += map[map.length - i - 1][i];
 			}
 			list.add(crossSum1);
 			list.add(crossSum2);
