@@ -9,10 +9,12 @@ class Main
 		while(true) {
 			String n = sc.next();
 			if (n.equals("0")) break;
+			char[] arr = n.toCharArray();
 			
-			String answer = "no";
-			if (n.endsWith(new StringBuilder(n.substring(0, n.length() / 2)).reverse().toString()))
-				answer = "yes";
+			String answer = "yes";
+            for(int i = 0; i < arr.length / 2; i++) {
+                if(arr[i] != arr[arr.length - 1 - i]) answer = "no";
+            }
 			
 			System.out.println(answer);
 		}
