@@ -1,19 +1,17 @@
 import java.util.Scanner;
 import java.io.FileInputStream;
-
+ 
 class Solution
 {
-	public static void main(String args[]) throws Exception
-	{
-		Scanner sc = new Scanner(System.in);
-		String s = sc.next();
+    public static void main(String args[]) throws Exception
+    {
+        Scanner sc = new Scanner(System.in);
+        String n = sc.next();
         
-        int answer = 0;
-
-		for(String n : s.split(""))
-		{
-			answer += Integer.parseInt(n);
-		}
-        System.out.println(answer);
-	}
+        int sum = 0;
+        for(String ch : n.split("")) {
+            sum += Integer.parseInt(ch);
+        }
+        System.out.println(sum);
+    }
 }
