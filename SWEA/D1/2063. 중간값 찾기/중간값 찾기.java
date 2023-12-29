@@ -1,22 +1,18 @@
+import java.util.Arrays;
 import java.util.Scanner;
 import java.io.FileInputStream;
-import java.util.*;
-
+ 
 class Solution
 {
-	public static void main(String args[]) throws Exception
-	{
-		Scanner sc = new Scanner(System.in);
-		int T;
-		T=sc.nextInt();
+    public static void main(String args[]) throws Exception
+    {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] arr = new int[n];
         
-        List<Integer> list = new ArrayList<>();
-
-		for(int test_case = 1; test_case <= T; test_case++)
-		{
-			list.add(sc.nextInt());
-		}
-        Collections.sort(list);
-        System.out.println(list.get(list.size()/2));
-	}
+        for(int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+        System.out.println(Arrays.stream(arr).sorted().limit(n/2+1).skip(n/2).sum());
+    }
 }
