@@ -1,18 +1,11 @@
-import java.util.*;
-import java.io.FileInputStream;
+import java.util.Scanner;
 
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{
+class Solution {
+	public static void main(String args[]) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		int T;
-		T=sc.nextInt();
-		List<String> list = new ArrayList<>();
-        
-		for(int test_case = 1; test_case <= T; test_case++)
-		{
-			System.out.println("#" + test_case);
+		
+		int T = sc.nextInt();
+		for(int test_case = 1; test_case <= T; test_case++) {
 			int n = sc.nextInt();
 			int[][] arr = new int[n][n];
 			
@@ -22,30 +15,40 @@ class Solution
 				}
 			}
 			
-			int[][] arr90 = rotate(n, arr);
-			int[][] arr180 = rotate(n, arr90);
-			int[][] arr270 = rotate(n, arr180);
+			int[][] arr90 = rotate(arr);
+			int[][] arr180 = rotate(arr90);
+			int[][] arr270 = rotate(arr180);
+			
+			StringBuilder sb = new StringBuilder();
 			
 			for(int i = 0; i < n; i++) {
-				String s1 = "";
-				String s2 = "";
-				String s3 = "";
 				for(int j = 0; j < n; j++) {
-					s1 += arr90[i][j];
-					s2 += arr180[i][j];
-					s3 += arr270[i][j];
+					sb.append(arr90[i][j]);
 				}
-				System.out.println(s1 + " " + s2 + " " + s3);
+				sb.append(" ");
+				for(int j = 0; j < n; j++) {
+					sb.append(arr180[i][j]);			
+				}
+				sb.append(" ");
+				for(int j = 0; j < n; j++) {
+					sb.append(arr270[i][j]);
+				}
+				sb.append("\n");
 			}
+			
+			System.out.print("#" + test_case + "\n" + sb.toString());
 		}
 	}
-    public static int[][] rotate(int n, int[][] arr) {
-		int[][] arr90 = new int[n][n];
-		for(int i = 0; i < n; i++) {
-			for(int j = 0; j < n; j++) {
-				arr90[j][n-1-i] = arr[i][j];
-			}
-		}
-		return arr90;
-	}
+	static int[][] rotate(int[][] arr) {
+        int n = arr.length;
+        int[][] rotate = new int[n][n];
+
+        for (int i = 0; i < rotate.length; i++) {
+            for (int j = 0; j < rotate[i].length; j++) {
+                rotate[i][j] = arr[n-1-j][i];
+            }
+        }
+
+        return rotate;
+    }
 }
