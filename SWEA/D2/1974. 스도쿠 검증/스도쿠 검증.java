@@ -1,59 +1,55 @@
-import java.util.*;
-import java.io.FileInputStream;
+import java.util.HashSet;
+import java.util.Scanner;
 
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{
+class Solution {
+	public static void main(String args[]) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		int T;
-		T=sc.nextInt();
-		for(int test_case = 1; test_case <= T; test_case++)
-		{
-            System.out.print("#" + test_case + " ");
-            int n = 9;
-            int[][] arr = new int[n][n];
-            for(int i = 0; i < n; i++) {
-                for(int j = 0; j < n; j++) {
-                    arr[i][j] = sc.nextInt();
-                }
-            }
-			int answer = 1;
-            for(int i = 0; i < n; i++) {
-                List<Integer> temp = new ArrayList<>();
-                for(int j = 0; j < n; j++) {
-                    temp.add(arr[j][i]);
-                }
-                if(temp.stream().distinct().count() != 9) {
-                    answer = 0;
-                    if(answer == 0)
-                    	break;
-                }
-                temp.clear();
-                if(Arrays.stream(arr[i]).distinct().count() != 9) {
-                    answer = 0;
-                    if(answer == 0)
-                    	break;
-                }
-            }
-            for(int i = 0; i < 3; i++)
-                for(int j = 0; j < 3; j++) {
-                    if(!check(i*3,j*3,arr)) {
-                        answer = 0;
-                        if(answer == 0)
-                            break;
-                    }
-                }
-            System.out.println(answer);
-		}
-	}
-    public static boolean check(int i, int j, int[][] arr) {
-		List<Integer> temp = new ArrayList<>();
-		for(int x = i; x < i + 3; x++) {
-			for(int y = j; y < j + 3; y++) {
-				temp.add(arr[x][y]);
+		
+		int T = sc.nextInt();
+		for(int test_case = 1; test_case <= T; test_case++) {
+			int n = 9;
+			int[][] map = new int[n][n];
+
+			for(int i = 0; i < n; i++) {
+				for(int j = 0; j < n; j++) {
+					map[i][j] = sc.nextInt();
+				}
 			}
+			
+			HashSet<Integer> row = new HashSet<>();
+			HashSet<Integer> col = new HashSet<>();
+			HashSet<Integer> square = new HashSet<>();
+			int answer = 1;
+			for(int i = 0; i < n; i++) {
+				for(int j = 0; j < n; j++) {
+					row.add(map[i][j]);
+					col.add(map[j][i]);
+				}
+				if(col.size() != 9 || row.size() != 9) {
+					answer = 0;
+					break;
+				}
+				row.clear();
+				col.clear();
+			}
+
+			if(answer == 1) {
+				for(int i = 0; i < n; i+=3) {
+					for(int j = 0; j < n; j+=3) {
+						for(int k = i; k < i+3; k++) {
+							for(int l = j; l < j+3; l++) {
+								square.add(map[k][l]);
+							}
+						}
+						if(square.size() != 9) {
+							answer = 0;
+							break;
+						}
+					}
+					if(answer == 0) break;
+				}
+			}
+			System.out.println("#" + test_case + " " + answer);
 		}
-		return temp.stream().distinct().count() == 9;
 	}
 }
