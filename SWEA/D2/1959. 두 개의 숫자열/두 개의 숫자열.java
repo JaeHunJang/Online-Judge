@@ -20,13 +20,13 @@ class Solution {
 			}
 			
 			int answer = 0;
-			if(n > m) answer = calc(A, B, 0);
-			else answer = calc(B, A, 0);
+			if(n > m) answer = calc(A, B);
+			else answer = calc(B, A);
 			
 			System.out.println("#" + test_case + " " + answer);
 		}
 	}
-	static int calc(int[] big, int[] small, int k) {
+	static int calc(int[] big, int[] small) {
 		int max = 0;
 		int sum = 0;
 		for(int i = 0; i < big.length - small.length + 1; i++) {
