@@ -1,50 +1,42 @@
-import java.util.*;
-import java.io.FileInputStream;
+import java.util.Scanner;
 
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{
+class Solution {
+	public static void main(String args[]) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		int T;
-		T=sc.nextInt();
-
-		for(int test_case = 1; test_case <= T; test_case++)
-		{
+		
+		int T = sc.nextInt();
+		for(int test_case = 1; test_case <= T; test_case++) {
 			int n = sc.nextInt();
 			int m = sc.nextInt();
-			List<Integer> list1 = new ArrayList<>();
-			List<Integer> list2 = new ArrayList<>();
 			
-			for(int i = 0; i < n; i++)
-				list1.add(sc.nextInt());
-			for(int i = 0; i < m; i++)
-				list2.add(sc.nextInt());
+			int[] A = new int[n];
+			int[] B = new int[m];
 			
-			int answer;
-			if(list1.size() > list2.size())
-				answer = calc(list1, list2);
-			else
-				answer = calc(list2, list1);
+			for(int i = 0; i < n; i++) {
+				A[i] = sc.nextInt();
+			}
+			for(int i = 0; i < m; i++) {
+				B[i] = sc.nextInt();
+			}
+			
+			int answer = 0;
+			if(n > m) answer = calc(A, B, 0);
+			else answer = calc(B, A, 0);
 			
 			System.out.println("#" + test_case + " " + answer);
-
 		}
 	}
-    
-    public static int calc(List<Integer> bigger, List<Integer> smaller) {
-		int n = smaller.size();
-		
-		List<Integer> list = new ArrayList<>();
-		int sum = 0;
+	static int calc(int[] big, int[] small, int k) {
 		int max = 0;
-		for(int i = 0; i < bigger.size() - n + 1; i++) {
-			sum = 0;
-			for(int j = 0; j < n; j++) {
-				sum += smaller.get(j) * bigger.get(j + i);
+		int sum = 0;
+		for(int i = 0; i < big.length - small.length + 1; i++) {
+			for(int j = i; j < small.length+i; j++) {
+				sum += (big[j] * small[j-i]);
 			}
 			max = Math.max(max, sum);
+			sum = 0;
 		}
+		
 		return max;
 	}
 }
