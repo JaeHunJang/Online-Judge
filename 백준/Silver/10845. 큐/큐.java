@@ -12,14 +12,13 @@ public class Main {
 	private static String last;
 	public static void main(String[] args) throws Exception {
 		init();
-		solve();
 		System.out.println(sb.toString());
 	}
 
 	private static void init() throws Exception {
 		N = Integer.parseInt(br.readLine());
 		q = new LinkedList<>();
-		for (int i = 0; i < N-1; i++) {
+		for (int i = 0; i < N; i++) {
 			solve();
 		}
 	}
