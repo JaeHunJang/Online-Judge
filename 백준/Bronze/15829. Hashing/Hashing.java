@@ -8,6 +8,7 @@ public class Main {
 	private static int T;
 	private static char[] chars;
 	private static long result;
+	private static final int MOD = 1234567891;
 	public static void main(String[] args) throws Exception {
 		init();
 		solve();
@@ -21,10 +22,11 @@ public class Main {
 	}
 
 	private static void solve() throws Exception {
+		long pow = 1;
 		for (int i = 0; i < chars.length; i++) {
-			result += (chars[i] - 96) * Math.pow(31, i);
+			result += (chars[i] - 96) * pow % MOD;
+			pow = pow * 31 % MOD; 
 		}
-		sb.append(result);
+		sb.append(result % MOD);
 	}
-	
 }
