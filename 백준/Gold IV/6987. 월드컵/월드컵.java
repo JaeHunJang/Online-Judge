@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -15,34 +12,19 @@ public class Main {
 			this.lose = lose;
 			this.draw = draw;
 		}
-
 		
 		@Override
 		public String toString() {
 			return "Country [win=" + win + ", draw=" + draw + ", lose=" + lose + "]";
 		}
 
-
 		@Override
 		public int compareTo(Country o) {
-			// TODO Auto-generated method stub
 			if (o.win == this.win) {
 				return this.lose - o.lose;
 			}
 			return o.win - this.win;
 		}
-
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + draw;
-			result = prime * result + lose;
-			result = prime * result + win;
-			return result;
-		}
-
 
 		@Override
 		public boolean equals(Object obj) {
@@ -80,29 +62,31 @@ public class Main {
 		T = 4; // 결과 개수
 		N = 6; // 나라
 		
-		result = new Country[N];
-		totalRound = N * (N-1);
+		result = new Country[N]; // 검사할 경기 결과
+		dp = new Country[N]; // 경기 결과 검사 진행 과정 저장
+		
+		totalRound = N * (N-1) / 2; // 전체 경기 수
+		nums = new int[totalRound][2]; // 경기 매치업
+		int idx = 0;
+		for (int i = 0; i < N; i++) {
+			for (int j = i+1; j < N; j++) {
+//				System.out.println(i + "," + j);
+				nums[idx][0] = i;
+				nums[idx++][1] = j;
+			}
+		}
+		
 		for (int t = 0; t < T; t++) {
 			st = new StringTokenizer(br.readLine());
-			dp = new Country[N];
-			answer = 0;
+			answer = 0; // 유효 여부
 			
-			nums = new int[totalRound/2][2];
 			for (int i = 0; i < N; i++) {
 				result[i] = new Country(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 				dp[i] = new Country(0, 0, 0);
 			}
 			
-			int idx = 0;
-			for (int i = 0; i < N; i++) {
-				for (int j = i+1; j < N; j++) {
-//					System.out.println(i + "," + j);
-					nums[idx][0] = i;
-					nums[idx++][1] = j;
-				}
-			}
 //			Arrays.sort(result); // 보기 편하려고 정렬 한번
-			
+//			
 //			System.out.println(t+"-------------------");
 //			for (int i = 0; i < N; i++) {
 //				System.out.println(result[i]);
@@ -114,96 +98,50 @@ public class Main {
 	}
 	
 	private static void solve() throws Exception {
-//		if (normalCheck()) {
-			dfs(0);
-//		}
+		dfs(0);
 	}
 	
 	private static void dfs(int cnt) {
-		if (answer == 1) return;
-		if (cnt == totalRound/2) {
+		if (answer == 1) return; // 경기 결과가 유효하면 dfs 종료
+		if (cnt == totalRound) { // 경기(매치업)를 끝까지 진행
 			boolean flag = true;
 			for (int i = 0; i < dp.length; i++) {
-				if (!dp[i].equals(result[i])) {
+				if (!dp[i].equals(result[i])) { // 경기 결과가 만들어진 검사할 경기 결과와 동일한지 비교
 					flag = false;
 				}
 //				System.out.println(dp[i]);
 			}
-			if (flag) {
+			if (flag) { // 경기가 동일하면 값 변경
 				answer = 1;
 			}
 //			System.out.println(answer);
 			return;
 		}
 		
+		// 승 무 패 어느 하나라도 해당 팀 경기결과와 차이가 나면 해당 dfs 종료 -> 경기결과가 계속 틀리기 때문에 더이상 진행할 필요 없음
 		if (dp[nums[cnt][0]].win > result[nums[cnt][0]].win 
 				|| dp[nums[cnt][0]].draw > result[nums[cnt][0]].draw 
 				|| dp[nums[cnt][0]].lose > result[nums[cnt][0]].lose ) return;
 		
-		
+		// 이긴 경우
 		dp[nums[cnt][0]].win++;
 		dp[nums[cnt][1]].lose++;
 		dfs(cnt+1);
 		dp[nums[cnt][0]].win--;
 		dp[nums[cnt][1]].lose--;
 		
+		// 무승부
 		dp[nums[cnt][0]].draw++;
 		dp[nums[cnt][1]].draw++;
 		dfs(cnt+1);
 		dp[nums[cnt][0]].draw--;
 		dp[nums[cnt][1]].draw--;
 		
+		// 진경우
 		dp[nums[cnt][0]].lose++;
 		dp[nums[cnt][1]].win++;
 		dfs(cnt+1);
 		dp[nums[cnt][0]].lose--;
 		dp[nums[cnt][1]].win--;
-		
 	}
-	
-//	private static boolean normalCheck() {
-//		for (int i = 0; i < result.length; i++) {
-//			if (!roundCheck(i)) {
-//				answer = 0;
-//				return false;
-//			}
-//			win += result[i].win;
-//			draw += result[i].draw;
-//			lose += result[i].lose;
-//		}
-//		if (!(totalRoundCheck() && winLoseCheck() && drawCheck())) {
-//			answer = 0;
-//			return false;
-//		}
-//		return true;
-//	}
-//	
-//	private static boolean roundCheck(int idx) {
-//		return result[idx].win + result[idx].draw + result[idx].lose == N - 1;
-//	}
-//	
-//	private static boolean totalRoundCheck() {
-//		return (win + draw + lose) == totalRound; 
-//	}
-//	
-//	private static boolean winLoseCheck() {
-//		int round = (totalRound - draw) / 2; // 승패 라운드
-//		if (win == lose && round == win && round == lose) {
-//			return true;
-//		}
-//		return false;
-//	}
-//	
-//	private static boolean drawCheck() {
-//		if (draw % 2 == 0) {
-//			int count = 0;
-//			for (int i = 0; i < N; i++) {
-//				if (count == 0) count = result[i].draw;
-//				else if (count > 0) count -= result[i].draw;
-//				else if (count < 0) count += result[i].draw;
-//			}
-//			return count == 0;
-//		}
-//		return false;
-//	}
 }
