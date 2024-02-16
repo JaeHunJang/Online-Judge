@@ -16,27 +16,11 @@ public class Main {
 			this.r = r;
 			this.c = c;
 		}
-
-		@Override
-		public String toString() {
-			return "Enemy [r=" + r + ", c=" + c + "]";
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			Enemy other = (Enemy) obj;
-			if (c != other.c)
-				return false;
-			if (r != other.r)
-				return false;
-			return true;
-		}
-		
 	}
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	private static StringBuilder sb = new StringBuilder();
 	private static StringTokenizer st;
-	private static int N, M, D, map[][], killCount,  rangerPos[], nowKill, nowDistance;
+	private static int N, M, D, map[][], killCount,  rangerPos[], nowKill;
 	private static int deltas[][] = {{0, -1}, {-1, 0}, {0, 1}};
 	private static boolean visited[][];
 	public static void main(String[] args) throws Exception {
@@ -71,14 +55,15 @@ public class Main {
 		simulation();
 		sb.append(killCount);
 	}
+	
 	private static void simulation() {
-		int[][] copyMap = copyArr(map);
+		int[][] copyMap = copyArr(map); // 궁수 위치별로 찾아야하기 때문에 맵 복사 진행
 		nowKill = 0;
 		for (int i = 0; i < N; i++) {
-			nowDistance = 1;
 			killEnermy(copyMap);
 			copyMap = moveDown(copyMap);
 		}
+		// 최다 킬 저장
 		killCount = Math.max(nowKill, killCount);
 	}
 	
@@ -89,10 +74,10 @@ public class Main {
 			if (map[N-1][rangerPos[p]] == 1) { // 제일 가까이 있는 첫 위치
 				list.add(new Enemy(N-1, rangerPos[p]));
 			} else {
-				Queue<Enemy> q = new ArrayDeque<>();
+				Queue<Enemy> q = new ArrayDeque<>(); // 없으면 bfs로 순회
 				q.offer(new Enemy(N-1, rangerPos[p]));
-				visited[N-1][rangerPos[p]] = true;
-				a:while(!q.isEmpty()) {
+				visited[N-1][rangerPos[p]] = true; // 방문처리
+				a:while(!q.isEmpty()) { // 궁수의 사거리 내에서 적 찾기
 					Enemy current = q.poll();
 					for (int d = 0; d < deltas.length; d++) {
 						int nr = current.r + deltas[d][0]; 
@@ -100,16 +85,16 @@ public class Main {
 						if (!isIn(nr, nc)) continue;
 						int distance = inRange(nr, nc, N, rangerPos[p]);
 						if (distance <= D) {
-							if (map[nr][nc] == 1) {
+							if (map[nr][nc] == 1) { // 사거리 내에 적이 있으면 적 위치정보 저장
 								for (Enemy e : list) {
-									if (e.r == nr && e.c == nc) {
+									if (e.r == nr && e.c == nc) { // 같은 적을 때릴 수 있어서 동일한 적이면 저장하지 않고 탈출
 										break a;
 									}
 								}
-								list.add(new Enemy(nr, nc));
+								list.add(new Enemy(nr, nc)); // 한번도 안때렸으면 저장하고 탈출
 								break a;
 							} else {
-								Enemy next = new Enemy(nr, nc); 
+								Enemy next = new Enemy(nr, nc); // 적을 못찾으면 다음 순회
 								if (!visited[next.r][next.c]) {
 									q.offer(next);
 									visited[next.r][next.c] = true;
@@ -120,6 +105,7 @@ public class Main {
 				}
 			}
 		}
+		// 찾은 적들 카운팅
 		for (Enemy e : list) {
 			if (map[e.r][e.c] == 1) {
 				map[e.r][e.c] = 0;
@@ -127,7 +113,7 @@ public class Main {
 			}
 		}
 	}
-	
+	// 2차원배열 복사 함수
 	private static int[][] copyArr(int[][] arr) {
 		int[][] copy = new int[arr.length][];
 		for (int i = 0; i < copy.length; i++) {
@@ -136,15 +122,12 @@ public class Main {
 		return copy;
 	}
 	
+	// 맵 유효범위 확인 함수
 	private static boolean isIn(int x, int y) {
 		return x >= 0 && x < N && y >= 0 && y < M;
 	}
 	
-	private static void printMap(int[][] map) {
-		for (int i = 0; i < N; i++) {
-			System.out.println(Arrays.toString(map[i]));
-		}
-	}
+	// 방문배열 초기화 함수
 	private static void initVisited() {
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
@@ -153,6 +136,7 @@ public class Main {
 		}
 	}
 	
+	// 적들 1칸 아래로 이동시키는 함수
 	private static int[][] moveDown(int[][] map) {
 		for (int i = N-1; i >= 1; i--) {
 			for (int j = 0; j < M; j++) {
@@ -163,15 +147,12 @@ public class Main {
 		return map;
 	}
 	
-	private static int inRange(int r, int c, int ranger) {
-//		System.out.printf("%d %d %d %n", r, c, ranger);
-		return Math.abs(N - r) + Math.abs(ranger - c);
-	}
-	
+	// 적과 궁수 사이 거리 계산 함수
 	private static int inRange(int r, int c, int rangerR, int rangerC) {
 		return Math.abs(rangerR - r) + Math.abs(rangerC - c);
 	}
 	
+	// 궁수 위치 조합 만들기 함수
 	private static void combiRangerPosition(int cnt, int start) {
 		if (cnt == 3) {
 			simulation();
