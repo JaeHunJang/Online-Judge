@@ -3,11 +3,9 @@ class Solution {
         int answer = 0;
         
         String num = Long.toString(n, k);
-        // System.out.println(num);
         for (String number : num.split("0")) {
             
             if (number.length() > 0) {
-                // System.out.println(number);
                 if (isPrime(Long.parseLong(number))) answer++;
             }
         }
