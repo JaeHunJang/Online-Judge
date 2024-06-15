@@ -1,55 +1,72 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {	
-	public static int result = Integer.MAX_VALUE;
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
-		int m = Integer.parseInt(st.nextToken());
-		int[][] map = new int[n][m];
-		int[][] visited = new int[n][m];
-		visited[0][0] = 1;
-		for (int i = 0; i < n; i++) {
-			int j = 0;
-			for (String num : br.readLine().split("")) {
-				map[i][j++] = Integer.parseInt(num);
-			}
-		}
-		
-		move(map, visited, 0, 0, 1);
-		System.out.println(result);
-	}
-	
-	static void move(int[][] map, int[][] visited, int x, int y, int count) {
-		int[] dx = {0, -1, 0, 1};
-		int[] dy = {1, 0, -1, 0};
-		if (x == map.length-1 && y == map[x].length-1) {
-			result = Math.min(count, result);
-			return;
-		}
-		
-		if (count > result) return;
-		
-		for (int i = 0; i < dx.length; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
-			if (nx < 0 || nx >= map.length) {
-				continue;
-			}
-			if (ny < 0 || ny >= map[x].length) {
-				continue;
-			}
-			
-			if (map[nx][ny] == 1) {
-				if (visited[nx][ny] == 0 || visited[nx][ny] > count) {
-					visited[nx][ny] = count;
-					move(map, visited, nx, ny, count+1);
-				}
-			}
-		}
-	}
+// 미로 탐색 / 20분
+public class Main {
+    static StringBuilder sb = new StringBuilder();
+    static int N, M, map[][], H, W, deltas[][] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    static boolean visited[][];
+
+    static class Pos {
+        int r, c;
+
+        public Pos(int r, int c) {
+            this.r = r;
+            this.c = c;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        map = new int[N][M];
+        visited = new boolean[N][M];
+        for (int i = 0; i < N; i++) {
+            int j = 0;
+            for (String ch : br.readLine().split("")) {
+                map[i][j++] = Integer.parseInt(ch);
+            }
+        }
+
+        bfs();
+        System.out.println(sb.toString());
+    }
+
+    static void bfs() {
+        Queue<Pos> q = new ArrayDeque<>();
+        q.offer(new Pos(0, 0));
+        visited[0][0] = true;
+
+        int cnt = 0;
+        while (!q.isEmpty()) {
+            int size = q.size();
+
+            cnt++;
+            for (int s = 0; s < size; s++) {
+                Pos cur = q.poll();
+
+                if (cur.r == N-1 && cur.c == M-1) {
+                    sb.append(cnt);
+                    return;
+                }
+
+                for (int d = 0; d < deltas.length; d++) {
+                    int nr = cur.r + deltas[d][0];
+                    int nc = cur.c + deltas[d][1];
+
+                    if (nr < 0 || nr >= N || nc < 0 || nc >= M) continue;
+                    if (visited[nr][nc] || map[nr][nc] == 0) continue;
+
+                    visited[nr][nc] = true;
+                    q.offer(new Pos(nr, nc));
+                }
+            }
+        }
+    }
 }
