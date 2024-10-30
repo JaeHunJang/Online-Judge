@@ -1,0 +1,4 @@
+-- 코드를 작성해주세요
+SELECT sum(price) 'TOTAL_PRICE'
+FROM ITEM_INFO
+WHERE RARITY = 'LEGEND';
