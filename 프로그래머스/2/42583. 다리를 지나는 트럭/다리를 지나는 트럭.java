@@ -11,12 +11,8 @@ class Solution {
         }
     }
     public int solution(int bridge_length, int weight, int[] truck_weights) {
-        int answer = 0;
         Queue<Truck> bridge = new ArrayDeque<>();
         Queue<Truck> trucks = new ArrayDeque<>();
-        for (int i = 0; i < bridge_length; i++) {
-            //bridge.offer(new Truck(0, 0));
-        }
         for (int w : truck_weights) {
             trucks.offer(new Truck(w, 0));
         }
@@ -51,11 +47,5 @@ class Solution {
         }
         
         return time;
-    }
-    
-    int totalWeight(Queue<Truck> bridge) {
-        return bridge.stream()
-            .mapToInt((truck) -> truck.w)
-            .sum();
     }
 }
