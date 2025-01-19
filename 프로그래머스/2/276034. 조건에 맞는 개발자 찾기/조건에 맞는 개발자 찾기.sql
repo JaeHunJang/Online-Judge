@@ -1,7 +1,4 @@
-SELECT ID, EMAIL, FIRST_NAME, LAST_NAME
+SELECT distinct ID, EMAIL, FIRST_NAME, LAST_NAME
 FROM DEVELOPERS d
-WHERE SKILL_CODE & (
-    SELECT SUM(CODE)
-    FROM SKILLCODES
-    WHERE NAME IN ('Python', 'C#'))
+INNER JOIN skillcodes s ON d.skill_code & s.code AND s.name in ('C#', 'Python')
 ORDER BY id;
