@@ -8,10 +8,11 @@ class Solution {
                     answer++;
                 }
             }
+            if (scores[0][0] < scores[i][0] && scores[0][1] < scores[i][1]) return -1;
+            
         }
         
         for (int i = 1; i < scores.length; i++) {
-            if (scores[0][0] < scores[i][0] && scores[0][1] < scores[i][1]) return -1;
         }
         
         return answer;
