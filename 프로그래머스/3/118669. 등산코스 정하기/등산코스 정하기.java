@@ -62,6 +62,8 @@ class Solution {
         while(!q.isEmpty()) {
             Node now = q.poll();
             
+            if (now.w > indensity[now.e]) continue;
+            
             for (Node next : list[now.e]) {
                 int max = Math.max(indensity[now.e], next.w);
                 if (indensity[next.e] > max) {
@@ -70,7 +72,6 @@ class Solution {
                 }
             }
         }
-        
         
         int summit = 0;
         int minTime = Integer.MAX_VALUE;
