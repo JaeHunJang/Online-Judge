@@ -25,7 +25,7 @@ class Solution {
         int cnt = 0;
         pq.offer(new Pos(x, y));
         
-        while (cnt < k && !pq.isEmpty()) {
+        while (cnt < k && !pq.isEmpty()) { 
             int size = pq.size();
             for (int s = 0; s < size; ++s) {
                 Pos now = pq.poll();
@@ -43,7 +43,6 @@ class Solution {
                     break;
                 }
             }
-            //System.out.println(pq);
             cnt++;
         }
         
