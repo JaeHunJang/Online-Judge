@@ -57,13 +57,14 @@ public class SAM_2024_2_2_1 {
             System.out.println(-1);
             return;
         }
-        System.out.println(medusaRoute);
-        for (Pos medusaPos : medusaRoute) {
-            System.out.println(medusaPos);
+        for (int i = 0; i < medusaRoute.size()-1; i++) {
+            Pos medusaPos = medusaRoute.get(i);
+            unStoneWarriors();
             moveMedusa(medusaPos);
             watchMedusa(medusaPos);
         }
 
+        sb.append(0);
         System.out.println(sb);
     }
 
@@ -140,10 +141,6 @@ public class SAM_2024_2_2_1 {
         for (int i = 0; i < M; i++) { // 전사들 배치
             if (!warriors[i].isDeath) warriorMap[warriors[i].r][warriors[i].c]++;
         }
-        System.out.println("현재 전사들 위치");
-        for (int i = 0; i < warriorMap.length; i++) {
-            System.out.println(Arrays.toString(warriorMap[i]));
-        }
 
         int[][] maxVisited = new int[N][N];
         int maxCnt = 0;
@@ -151,13 +148,7 @@ public class SAM_2024_2_2_1 {
             Pos now = new Pos(medusaPos.r, medusaPos.c);
             int[][] visited = new int[N][N];
             int cnt = 0;
-            while (isIn(now.r, now.c) && visited[now.r][now.c] == 0) {
-                visited[now.r][now.c] = 1;
-                if (warriorMap[now.r][now.c] > 0) {
-                    cnt += warriorMap[now.r][now.c];
-                    hideWarriors(now, medusaPos, visited);
-                }
-
+            while (isIn(now.r, now.c)) {
                 for (int d2 = 0; d2 < deltasWatch[d].length; d2++) {
                     int nr = now.r + deltasWatch[d][d2][0];
                     int nc = now.c + deltasWatch[d][d2][1];
@@ -165,38 +156,86 @@ public class SAM_2024_2_2_1 {
                         visited[nr][nc] = 1;
                         if (warriorMap[nr][nc] > 0) {
                             cnt += warriorMap[nr][nc];
-                            hideWarriors(new Pos(nr, nc), medusaPos, visited);
+                            hideWarriors(new Pos(nr, nc), medusaPos, visited, d);
+                            break;
                         }
                         nr += deltasWatch[d][d2][0];
                         nc += deltasWatch[d][d2][1];
                     }
+                    //System.out.println("현재 확인한 시야");
+                    //for (int i = 0; i < N; i++) {
+                    //    System.out.println(Arrays.toString(visited[i]));
+                    //}
                 }
                 now.r += deltas[d][0];
                 now.c += deltas[d][1];
             }
-
-            System.out.println("현재 메두사 시점 " + Arrays.toString(deltas[d]) + " 잡은 전사 수" + cnt);
-            System.out.println("메두사 위치 " + medusaPos);
-            for (int i = 0; i < visited.length; i++) {
-                System.out.println(Arrays.toString(visited[i]));
+            now = new Pos(medusaPos.r, medusaPos.c);
+            while (isIn(now.r, now.c) && visited[now.r][now.c] == 0) {
+                visited[now.r][now.c] = 1;
+                if (warriorMap[now.r][now.c] > 0) {
+                    cnt += warriorMap[now.r][now.c];
+                    hideWarriors(now, medusaPos, visited, d);
+                }
+                now.r += deltas[d][0];
+                now.c += deltas[d][1];
             }
+            //System.out.println("현재 시야의 돌이 된 전사 :" + cnt);
+
             if (cnt > maxCnt) {
                 maxCnt = cnt;
                 for (int i = 0; i < visited.length; i++) {
                     maxVisited[i] = visited[i].clone();
+                    maxVisited[medusaPos.r][medusaPos.c] = 0; // 메두사 위치는 초기화
                 }
             }
         }
 
+        for (int i = 0; i < maxVisited.length; i++) {
+            for (int j = 0; j < maxVisited[i].length; j++) {
+                if (maxVisited[i][j] == 1 && warriorMap[i][j] > 0) {
+                    stoneWarriors(i, j);
+                }
+            }
+        }
+        //System.out.println("매두사의 시선" + medusaPos);
+        //for (int i = 0; i < N; i++) {
+        //    System.out.println(Arrays.toString(maxVisited[i]));
+        //}
+
+        //System.out.println("현재 전사 위치");
+        //for (int i = 0; i < N; i++) {
+        //    System.out.println(Arrays.toString(warriorMap[i]));
+        //}
         moveWarriors(medusaPos, maxVisited);
     }
 
-    static void hideWarriors(Pos warrior, Pos medusaPos, int[][] visited) {
+    static void stoneWarriors(int r, int c) {
+        for (int i = 0; i < M; i++) {
+            if (!warriors[i].isDeath && warriors[i].r == r && warriors[i].c == c) {
+                warriors[i].isStone = true;
+            }
+        }
+    }
+
+    static void unStoneWarriors() {
+        for (int i = 0; i < M; i++) {
+            if (!warriors[i].isDeath) {
+                warriors[i].isStone = false;
+            }
+        }
+    }
+
+    static void hideWarriors(Pos warrior, Pos medusaPos, int[][] visited, int d) {
         if (warrior.c == medusaPos.c) {
             if (warrior.r < medusaPos.r) {
                 for (int i = warrior.r-1; i >= 0; i--) {
                     visited[i][warrior.c] = 2;
                 }
+                //System.out.println("직선으로 볼때");
+                //for (int i = 0; i < N; i++) {
+                //    System.out.println(Arrays.toString(visited[i]));
+                //}
             } else {
                 for (int i = warrior.r+1; i < N; i++) {
                     visited[i][warrior.c] = 2;
@@ -212,40 +251,49 @@ public class SAM_2024_2_2_1 {
                     visited[warrior.r][i] = 2;
                 }
             }
-        }
-
-        if (warrior.r < medusaPos.r && warrior.c < medusaPos.c) {
-            int[][] deltas = {{-1,0},{-1,-1}};
-            hide(warrior, deltas, visited);
-        } else if (warrior.r < medusaPos.r && warrior.c > medusaPos.c) {
-            int[][] deltas = {{-1,0},{-1,1}};
-            hide(warrior, deltas, visited);
-        } else if (warrior.r > medusaPos.r && warrior.c < medusaPos.c) {
-            int[][] deltas = {{1,0},{1,-1}};
-            hide(warrior, deltas, visited);
-        } else if (warrior.r > medusaPos.r && warrior.c > medusaPos.c) {
-            int[][] deltas = {{1,0},{1,1}};
-            hide(warrior, deltas, visited);
+        }else {
+            if (warrior.r < medusaPos.r && warrior.c < medusaPos.c) {
+                int[][] deltasWarrior = {deltas[d],{-1,-1}};
+                hide(warrior, deltasWarrior, visited);
+            } else if (warrior.r < medusaPos.r && warrior.c > medusaPos.c) {
+                int[][] deltasWarrior = {deltas[d],{-1,1}};
+                hide(warrior, deltasWarrior, visited);
+            } else if (warrior.r > medusaPos.r && warrior.c < medusaPos.c) {
+                int[][] deltasWarrior = {deltas[d],{1,-1}};
+                hide(warrior, deltasWarrior, visited);
+            } else if (warrior.r > medusaPos.r && warrior.c > medusaPos.c) {
+                int[][] deltasWarrior = {deltas[d],{1,1}};
+                hide(warrior, deltasWarrior, visited);
+            }
         }
     }
 
-    static void hide(Pos warrior, int[][] deltas, int[][] visited) {
-        Queue<Pos> q = new ArrayDeque<>();
-        q.offer(warrior);
-
-        while (!q.isEmpty()) {
-            Pos now = q.poll();
-
-            for (int d = 0; d < deltas.length; d++) {
-                int nr = now.r + deltas[d][0];
-                int nc = now.c + deltas[d][1];
-
-                if (isIn(nr, nc)) {
-                    visited[nr][nc] = 2;
-                    q.offer(new Pos(nr, nc));
-                }
+    static void hide(Pos warrior, int[][] deltasW, int[][] visited) {
+        //System.out.println("전사가 보는 방향");
+        //for (int i = 0; i < deltasW.length; i++) {
+        //    System.out.println(Arrays.toString(deltasW[i]));
+        //}
+        int nr = warrior.r;
+        int nc = warrior.c;
+        while (isIn(nr, nc)) {
+            visited[nr][nc] = 2;
+            int nr2 = nr + deltasW[1][0];
+            int nc2 = nc + deltasW[1][1];
+            while (isIn(nr2, nc2)) {
+                visited[nr2][nc2] = 2;
+                nr2 += deltasW[1][0];
+                nc2 += deltasW[1][1];
             }
+
+            nr += deltasW[0][0];
+            nc += deltasW[0][1];
         }
+        visited[warrior.r][warrior.c] = 1; // 석화된자리는 원복
+
+        //System.out.println("전사가 가리는 방향");
+        //for (int i = 0; i < visited.length; i++) {
+        //    System.out.println(Arrays.toString(visited[i]));
+        //}
     }
 
     static void moveWarriors(Pos medusaPos, int[][] visited) {
@@ -254,23 +302,23 @@ public class SAM_2024_2_2_1 {
         for (int k = 0; k < 2; k++) {
             for (int i = 0; i < M; i++) {
                 if (!warriors[i].isDeath && !warriors[i].isStone) {
-                    int midDir = -1;
+                    int minDir = -1;
                     int minDist = getDist(warriors[i].r, warriors[i].c, medusaPos.r, medusaPos.c);
                     int[][] nowDeltas = k == 0 ? deltas : deltas2; // 첫번째 이동 : 두번째 이동
                     for (int d = 0; d < nowDeltas.length; d++) {
                         int nr = warriors[i].r + nowDeltas[d][0];
                         int nc = warriors[i].c + nowDeltas[d][1];
-                        if (isIn(nr, nc) && visited[nr][nc] == 1) { // 메두사가 보는 위치 조건 추가
+                        if (isIn(nr, nc) && visited[nr][nc] != 1) { // 메두사가 보는 위치 조건 추가
                             int calcDist = getDist(nr, nc, medusaPos.r, medusaPos.c);
                             if (minDist > calcDist) {
                                 minDist = calcDist;
-                                midDir = d;
+                                minDir = d;
                             }
                         }
                     }
-                    if (midDir != -1) {
-                        warriors[i].r += nowDeltas[midDir][0];
-                        warriors[i].c += nowDeltas[midDir][1];
+                    if (minDir != -1) {
+                        warriors[i].r += nowDeltas[minDir][0];
+                        warriors[i].c += nowDeltas[minDir][1];
                         moveDist++;
                         if (medusaPos.isDupl(warriors[i])) {
                             attackCnt++;
