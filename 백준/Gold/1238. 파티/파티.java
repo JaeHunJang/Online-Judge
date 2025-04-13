@@ -2,88 +2,68 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
-// 1238. 파티 / 분
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static int N, M, X, minDistReverse[], minDist[];
-    static List<Node>[] list;
-    static boolean visited[];
-    static final int INF = 1000 * 10000 * 100; // 마을 수 * 도로 수 * 최대시간
-
     static class Node {
-        int to, w;
-
-        public Node(int to, int w) {
-            this.to = to;
+        int from, w;
+        Node (int from, int w) {
+            this.from = from;
             this.w = w;
         }
     }
-
+    static final int INF = 10000*1000+1;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken()); // 마을 수
-        M = Integer.parseInt(st.nextToken()); // 도로 수
-        X = Integer.parseInt(st.nextToken()); // 도착마을
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        int X = Integer.parseInt(st.nextToken());
 
-        list = new List[N+1];
-        for (int i = 0; i <= N ; i++) {
+        int[] weights = new int[N+1];
+        List<Node>[] list = new List[N+1];
+
+        for (int i = 0; i < list.length; i++) {
             list[i] = new ArrayList<>();
         }
-        
-        int from, to, w;
+
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            from = Integer.parseInt(st.nextToken());
-            to = Integer.parseInt(st.nextToken());
-            w = Integer.parseInt(st.nextToken());
-            list[from].add(new Node(to, w));
+            int to = Integer.parseInt(st.nextToken());
+            int from = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            list[to].add(new Node(from, w));
         }
 
-        minDist = new int[N+1];
-
-
-        solve();
-        System.out.println(sb.toString());
-    }
-
-    static void solve() throws Exception {
-        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> {
-            return Integer.compare(o1.w, o2.w);
-        });
-        int dist[] = new int[N+1];
         for (int i = 1; i <= N; i++) {
-            pq.clear();
-            Arrays.fill(dist, INF);
-            visited = new boolean[N+1];
-            dist[i] = 0;
-            pq.offer(new Node(i, 0));
-
-            while(!pq.isEmpty()) {
-                Node now = pq.poll();
-                if (visited[now.to]) continue;
-                visited[now.to] = true;
-
-                for (Node next : list[now.to]) {
-                    if (dist[next.to] > dist[now.to] + next.w) {
-                        dist[next.to] = dist[now.to] + next.w;
-
-                        pq.offer(new Node(next.to, dist[next.to]));
-                    }
-                }
-            }
-
-            minDist[i] = dist[X];
-            if (i == X) {
-                minDistReverse = dist.clone();
-            }
+            weights[i] = bfs(i, list)[X];
         }
-
+        int[] party = bfs(X, list);
         int answer = 0;
         for (int i = 1; i <= N; i++) {
-            answer = Math.max(answer, minDist[i] + minDistReverse[i]);
+            if (i != X) answer = Math.max(answer, weights[i] + party[i]);
         }
-        sb.append(answer);
+
+        System.out.print(answer);
     }
 
+    static int[] bfs(int start, List<Node>[] list) {
+        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.w, o2.w));
+        pq.offer(new Node(start, 0));
+        int[] weights = new int[list.length];
+        Arrays.fill(weights, INF);
+        weights[start] = 0;
+
+        while (!pq.isEmpty()) {
+            Node now = pq.poll();
+
+            for (Node next : list[now.from]) {
+                if (next.w + weights[now.from] < weights[next.from]) {
+                    weights[next.from] = next.w + weights[now.from];
+                    pq.offer(new Node(next.from, weights[next.from]));
+                }
+            }
+        }
+
+        return weights;
+    }
 }
