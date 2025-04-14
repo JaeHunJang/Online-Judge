@@ -19,15 +19,8 @@ public class SAM_2024_2_1_1 {
             System.out.println(-1);
             return;
         }
-//        System.out.println("공간평면에서 시작:" + startSpacePos + ", 도착:" + endSpacePos);
-//        System.out.println("시간의벽에서 시작:" + startTimePos + ", 도착:" + endTimePos);
 
         List<Pos> timeWallRoute = getTimeWallRoute();
-//        System.out.println(timeWallRoute);
-//        System.out.println("시간의벽 탈출하고 맵 상태");
-//        for (int i = 0; i < N; i++) {
-//            System.out.println(Arrays.toString(map[i]));
-//        }
         if (timeWallRoute == null) {
             System.out.println(-1);
             return;
@@ -60,7 +53,6 @@ public class SAM_2024_2_1_1 {
                 }
             }
         }
-//        System.out.println("공간평면의 시간의 벽 위치 " + startTimeWall + ", " + endTimeWall);
 
         // 시간의 벽 초기화
         timeMap = new int[M * 3][M * 3];
@@ -133,14 +125,6 @@ public class SAM_2024_2_1_1 {
             }
         }
 
-        // 시간의 벽 출력
-//        System.out.println("시간의 벽 구조");
-//        for (int i = 0; i < timeMap.length; i++) {
-//            System.out.println(Arrays.toString(timeMap[i]));
-//        }
-
-//        System.out.println("타임머신 위치 : " + startTimePos);
-
         anomalies = new Anomaly[F];
         for (int i = 0; i < F; i++) {
             st = new StringTokenizer(br.readLine());
@@ -193,22 +177,15 @@ public class SAM_2024_2_1_1 {
         int[][] visited = new int[M * 3][M * 3];
         int cnt = 1;
         visited[startTimePos.r][startTimePos.c] = cnt;
-
-//        System.out.println("초기 방문 처리" + startTimePos);
-//        for (int i = 0; i < visited.length; i++) {
-//            System.out.println(Arrays.toString(visited[i]));
-//        }
         cnt++;
 
         while (!q.isEmpty()) {
             int size = q.size();
-//            System.out.println(q);
             for (int s = 0; s < size; s++) {
                 Pos now = q.poll();
 
                 if (now == null) continue;
                 if (now.r == endTimePos.r && now.c == endTimePos.c) { // 시간의 벽 탈출 위치
-//                now.history.add(endTimeWall);
                     return now.history;
                 }
 
@@ -228,9 +205,6 @@ public class SAM_2024_2_1_1 {
                             if (d == 3) { // 위로 북쪽
                                 int gap = now.c - time0start.c + 1;
                                 next = new Pos(now.r - gap, now.c - gap);
-//                                System.out.println("동북" + next + " | " + nr +", " + nc);
-//                                System.out.println(time0start);
-//                                System.out.println(now + ", " + gap);
                             }
                         }
                         if (rotateDir == 1) { // 서쪽
@@ -261,23 +235,17 @@ public class SAM_2024_2_1_1 {
                             }
                         }
                         if (next == null || !isInTimeMap(next.r, next.c) || timeMap[next.r][next.c] >= 1 || visited[next.r][next.c] > 0) {
-//                            System.out.println(now);
                             continue;
                         }
                         visited[next.r][next.c] = cnt;
                     } else {
                         next = new Pos(nr, nc);
                     }
-//                    System.out.println((now != null ? now : "null") +", " + (next != null ? next : "null"));
                     next.history.addAll(now.history); // 이전 위치 기록
                     next.history.add(new Pos(next.r, next.c)); // 현재 위치 기록
                     q.offer(next);
                 }
             }
-//            System.out.println(cnt + "단계 방문 처리");
-//            for (int i = 0; i < visited.length; i++) {
-//                System.out.println(Arrays.toString(visited[i]));
-//            }
             cnt++;
         }
 
@@ -329,10 +297,6 @@ public class SAM_2024_2_1_1 {
             int size = q.size();
             time++;
             expandAnomaly(time);
-//            System.out.println(time + "시간 맵 상태");
-//            for (int i = 0; i < N; i++) {
-//                System.out.println(Arrays.toString(map[i]));
-//            }
             for (int s = 0; s < size; s++) {
                 Pos now = q.poll();
 
@@ -350,10 +314,6 @@ public class SAM_2024_2_1_1 {
                 }
             }
 
-//            System.out.println(time + "시간 방문처리");
-//            for (int i = 0; i < N; i++) {
-//                System.out.println(Arrays.toString(visited[i]));
-//            }
         }
 
         return -1;
