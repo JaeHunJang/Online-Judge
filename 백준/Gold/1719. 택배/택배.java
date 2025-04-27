@@ -37,11 +37,11 @@ public class Main {
             list[from].add(new Edge(to, d));
             list[to].add(new Edge(from, d));
         }
-//        System.out.println(Arrays.toString(list));
 
         for (int i = 1; i <= N; i++) {
-            search(i);
+//            search(i);
         }
+        search2();
         System.out.println(sb);
     }
 
@@ -51,15 +51,7 @@ public class Main {
         Arrays.fill(distances, Integer.MAX_VALUE);
 
         PriorityQueue<Edge> pq = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.dist, o2.dist));
-//        pq.offer(new Edge(start, 0));
         distances[start] = 0;
-//        for (Edge next : list[start]) {
-//            if (distances[next.to] > distances[start] + next.dist) {
-//                distances[next.to] = distances[start] + next.dist;
-//                nodes[next.to] = next.to;
-//                pq.offer(new Edge(next.to, distances[next.to], next.to));
-//            }
-//        }
         pq.offer(new Edge(start, 0));
         while (!pq.isEmpty()) {
             Edge now = pq.poll();
@@ -78,11 +70,48 @@ public class Main {
                 }
             }
         }
+
         for (int i = 1; i <= N; i++) {
             if (nodes[i] == 0) sb.append("- ");
             else sb.append(nodes[i]).append(" ");
         }
         sb.append("\n");
         return distances;
+    }
+
+    static void search2() {
+        int[][] dp = new int[N+1][N+1];
+        int[][] nodes = new int[N+1][N+1];
+        for (int i = 1; i <= N; i++) {
+            Arrays.fill(dp[i], Integer.MAX_VALUE/2);
+            dp[i][i] = 0;
+            for (int j = 1; j <= N; j++) {
+                if (i == j) continue;
+                nodes[i][j] = j;
+            }
+        }
+        for (int i = 0; i < list.length; i++) {
+            for (Edge e : list[i]) {
+                dp[i][e.to] = e.dist;
+            }
+        }
+        for (int k = 1; k <= N; k++) {
+            for (int i = 1; i <= N; i++) {
+                for (int j = 1; j <= N; j++) {
+                    if (dp[i][j] > dp[i][k] + dp[k][j]) {
+                        dp[i][j] = dp[i][k] + dp[k][j];
+                        nodes[i][j] = nodes[i][k];
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                if (nodes[i][j] == 0) sb.append("- ");
+                else sb.append(nodes[i][j]).append(" ");
+            }
+            sb.append("\n");
+        }
     }
 }
