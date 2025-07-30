@@ -30,10 +30,10 @@ public class Main {
 //                System.out.println(0 + "|" + i);
                 map[0][i] += growSize();
             }
-            for (int i = 1; i < M; i++) {
-                for (int j = 1; j < M; j++) {
-                    map[i][j] = Math.max(map[i][j], Math.max(map[i][j-1], Math.max(map[i-1][j-1], map[i-1][j])));
-                }
+        }
+        for (int i = 1; i < M; i++) {
+            for (int j = 1; j < M; j++) {
+                map[i][j] = Math.max(map[i][j], Math.max(map[i][j-1], Math.max(map[i-1][j-1], map[i-1][j])));
             }
         }
 
