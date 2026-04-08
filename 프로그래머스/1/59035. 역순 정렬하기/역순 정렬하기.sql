@@ -1,4 +1,4 @@
 -- 코드를 입력하세요
-SELECT NAME, DATETIME
+SELECT name, datetime
 FROM ANIMAL_INS
-ORDER BY ANIMAL_ID DESC
+order by animal_id desc

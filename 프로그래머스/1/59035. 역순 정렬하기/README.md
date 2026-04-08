@@ -1,6 +1,6 @@
 # [level 1] 역순 정렬하기 - 59035 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/59035?language=mysql) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/59035) 
 
 ### 성능 요약
 
@@ -12,11 +12,11 @@
 
 ### 채점결과
 
-Empty
+합계: 100.0 / 100.0
 
 ### 제출 일자
 
-2023년 10월 4일 10:13:9
+2026년 04월 08일 20:36:24
 
 ### 문제 설명
 
