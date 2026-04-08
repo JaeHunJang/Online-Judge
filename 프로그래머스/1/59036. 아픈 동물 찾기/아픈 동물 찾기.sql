@@ -1,5 +1,5 @@
 -- 코드를 입력하세요
-SELECT ANIMAL_ID, NAME
+SELECT animal_id, name
 FROM ANIMAL_INS
-WHERE INTAKE_CONDITION = 'Sick'
-ORDER BY ANIMAL_ID 
+WHERE intake_condition = 'Sick'
+ORDER BY 1
