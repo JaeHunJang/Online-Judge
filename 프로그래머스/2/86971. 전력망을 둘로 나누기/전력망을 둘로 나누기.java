@@ -3,41 +3,42 @@ import java.util.*;
 class Solution {
     List<Integer>[] list;
     public int solution(int n, int[][] wires) {
-        int answer = n;
-        
+        int answer = -1;
         list = new List[n+1];
-        for (int i = 0; i < list.length; i++) {
-            list[i] = new ArrayList();
+        for (int i = 1; i <= n; i++) list[i] = new ArrayList<>();
+        for (int[] wire : wires) {
+            int from = wire[0];
+            int to = wire[1];
+            list[from].add(to);
+            list[to].add(from);
         }
         
-        for (int i = 0; i < wires.length; i++) {
-            list[wires[i][0]].add(wires[i][1]);
-            list[wires[i][1]].add(wires[i][0]);
-        }
         
-        for (int i = 0; i < wires.length; i++) {
-            int diff = Math.abs(bfs(wires[i][0], wires[i][1], n) - bfs(wires[i][1], wires[i][0], n));
-            answer = Math.min(answer, diff);
+        answer = Integer.MAX_VALUE;
+        for (int[] wire : wires) {
+            boolean[] visited = new boolean[n+1];
+            int a = bfs(list, wire[0], wire[1], visited);
+            int b = bfs(list, wire[1], wire[0], visited);
+            answer = Math.min(answer, Math.abs(a - b));
         }
         
         return answer;
     }
     
-    int bfs(int start, int none, int n) {
-        Queue<Integer> q = new ArrayDeque();
+    public int bfs(List<Integer>[] list, int start, int pass, boolean[] visited) {
+        Queue<Integer> q = new ArrayDeque<>();
         q.offer(start);
-        boolean visited[] = new boolean[n+1];
         visited[start] = true;
         
-        int cnt = 0;
+        int cnt = 1;
         while(!q.isEmpty()) {
             int now = q.poll();
-            cnt++;
             
             for (int next : list[now]) {
-                if (visited[next] || next == none) continue;
+                if (visited[next] || next == pass) continue;
                 visited[next] = true;
                 q.offer(next);
+                cnt++;
             }
         }
         
