@@ -1,48 +1,40 @@
 import java.util.*;
 
 class Solution {
-    boolean[] visited;
-    List<Integer>[] list;
-    int answer = 0;
     public int solution(int n, int[][] computers) {
+        int answer = 0;
         
+        if (n == 0) return 1;
         
-        list = new List[n];
-        visited = new boolean[n];
-        for(int i = 0; i < n; i++) {
-            list[i] = new ArrayList();
-            for (int j = 0; j < n; j++) {
-                if (i == j) continue;
-                if (computers[i][j] == 1) {
-                    list[i].add(j);
-                    if (list[j] == null) {
-                        list[j] = new ArrayList();
-                    }
-                    list[j].add(i);
+        boolean[] visited = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (bfs(i, visited, computers) != 0) answer++;
+        }
+        
+        return answer;
+    }
+    
+    int bfs(int start, boolean[] visited, int[][] computers) {
+        if (visited[start]) return 0;
+        visited[start] = true;
+        
+        Queue<Integer> q = new ArrayDeque<>();
+        q.offer(start);
+        
+        int cnt = 1;
+        while(!q.isEmpty()) {
+            int now = q.poll();
+            
+            for (int i = 0; i < computers[now].length; i++) {
+                if (i == now || visited[i]) continue;
+                if (computers[now][i] == 1) {
+                    visited[i] = true;
+                    q.offer(i);
+                    cnt++;
                 }
             }
         }
         
-        for (int i = 0; i < n; i++) {
-            bfs(i);
-        }
-        return answer;
-    }
-    
-    void bfs(int start) {
-        if (visited[start]) return;
-        Queue<Integer> q = new ArrayDeque();
-        q.offer(start);
-        visited[start] = true;
-        answer++;
-        while(!q.isEmpty()) {
-            int cur = q.poll();
-            
-            for (int next : list[cur]) {
-                if (visited[next]) continue;
-                visited[next] = true;
-                q.offer(next);
-            }
-        }
+        return cnt;
     }
 }
