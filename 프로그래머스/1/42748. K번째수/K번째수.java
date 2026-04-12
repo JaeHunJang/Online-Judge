@@ -1,18 +1,15 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int[] solution(int[] array, int[][] commands) {
         int[] answer = new int[commands.length];
         
         int i = 0;
-        for (int[] command : commands) {
-            answer[i++] = Arrays.stream(array)
-                .limit(command[1]).skip(command[0]-1)
-                .sorted()
-                .toArray()[command[2]-1];
+        for (int[] cmd : commands) {
+            int[] tmp = Arrays.copyOfRange(array, cmd[0]-1, cmd[1]);
+            Arrays.sort(tmp);
+            answer[i++] = tmp[cmd[2]-1];
         }
-        
-        
         return answer;
     }
 }
